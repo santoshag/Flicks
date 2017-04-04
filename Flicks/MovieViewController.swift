@@ -16,6 +16,8 @@ class MovieViewController: UIViewController, UITableViewDataSource, UITableViewD
     @IBOutlet weak var tableView: UITableView!
     var movies: [NSDictionary]?
         
+    @IBOutlet weak var networkErrorView: UIView!
+    @IBOutlet weak var networkErrorLabel: UILabel!
     var refreshControl: UIRefreshControl!
     
     
@@ -32,7 +34,8 @@ class MovieViewController: UIViewController, UITableViewDataSource, UITableViewD
         self.refreshControl = UIRefreshControl()
         refreshControl.addTarget(self, action: #selector(refreshControlAction(_:)), for: UIControlEvents.valueChanged)
         tableView.insertSubview(refreshControl, at: 0)
-        
+        tableView.addSubview(networkErrorView)
+
         MBProgressHUD.showAdded(to: self.view, animated: true)
         
         let api_key = "a07e22bc18f5cb106bfe4cc1f83ad8ed"
@@ -44,6 +47,10 @@ class MovieViewController: UIViewController, UITableViewDataSource, UITableViewD
             delegateQueue:OperationQueue.main
         )
         
+        // Set up network error message view
+        networkErrorView.isHidden = true
+        networkErrorLabel.text = "Network unreachable."
+        networkErrorLabel.textColor = UIColor.white
         
         let task : URLSessionDataTask = session.dataTask(
             with: request as URLRequest,
@@ -62,10 +69,16 @@ class MovieViewController: UIViewController, UITableViewDataSource, UITableViewD
                         // This is where you will store the returned array of posts in your posts property
                         self.movies = responseDictionary["results"] as! [NSDictionary]
                         self.tableView.reloadData()
+                        self.networkErrorView.isHidden = true
+
 
                     }
                 }else{
+                    MBProgressHUD.hide(for: self.view, animated: true)
                     //handle error
+                    self.networkErrorView.isHidden = false
+                    self.tableView.bringSubview(toFront: self.networkErrorView)
+
                 }
         });
         task.resume()
