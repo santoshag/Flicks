@@ -32,6 +32,8 @@ The following **additional** features are implemented:
 
 Here's a walkthrough of implemented user stories:
 
+<img src='demo_week1.gif' title='Video Walkthrough' width='' alt='Video Walkthrough' />
+
 [Demo Video](https://youtu.be/V_5z7hmuCNE).
 
 ## Notes
