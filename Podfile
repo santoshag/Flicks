@@ -6,5 +6,5 @@ target 'Flicks' do
   use_frameworks!
 
   # Pods for Flicks
-
+  pod 'AFNetworking'
 end
